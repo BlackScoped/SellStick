@@ -185,14 +185,14 @@ public class PlayerListener implements Listener {
 							return;
 						}
 						// Warzone
-						if ((faction.getName().contains("Warzone") && !StickConfig.instance.allowWarzone)) {
+						else if ((faction.getName().contains("Warzone") && !StickConfig.instance.allowWarzone)) {
 							plugin.msg(p, StickConfig.instance.territoryMessage.replace("%claims%",
 									mplayer.getRelationTo(faction).getColor() + faction.getName()));
 							e.setCancelled(true);
 							return;
 						}
 						// Safezone
-						if ((faction.getName().contains("Safezone") && !StickConfig.instance.allowSafezone)) {
+						else if ((faction.getName().contains("Safezone") && !StickConfig.instance.allowSafezone)) {
 							plugin.msg(p, StickConfig.instance.territoryMessage.replace("%claims%",
 									mplayer.getRelationTo(faction).getColor() + faction.getName()));
 							e.setCancelled(true);
@@ -200,7 +200,7 @@ public class PlayerListener implements Listener {
 						}
 
 						// Enemy
-						if ((mplayer.hasFaction() && mplayer.isInEnemyTerritory()
+						else if ((mplayer.hasFaction() && mplayer.isInEnemyTerritory()
 								&& !StickConfig.instance.allowEnemy)) {
 							plugin.msg(p, StickConfig.instance.territoryMessage.replace("%claims%",
 									mplayer.getRelationTo(faction).getColor() + faction.getName()));
@@ -208,24 +208,32 @@ public class PlayerListener implements Listener {
 							return;
 						}
 
-						// Neutral
-
-						if ((mplayer.hasFaction() && mplayer.getRelationTo(faction) == Rel.NEUTRAL
-								&& !StickConfig.instance.allowNeutral)) {
-							plugin.msg(p, StickConfig.instance.territoryMessage.replace("%claims%",
-									mplayer.getRelationTo(faction).getColor() + faction.getName()));
-							e.setCancelled(true);
-							return;
-						}
 
 						// Ally
-						if ((mplayer.hasFaction() && mplayer.getRelationTo(faction) == Rel.ALLY
+						else if ((mplayer.hasFaction() && mplayer.getRelationTo(faction) == Rel.ALLY
 								&& !StickConfig.instance.allowAlly)) {
 							plugin.msg(p, StickConfig.instance.territoryMessage.replace("%claims%",
 									mplayer.getRelationTo(faction).getColor() + faction.getName()));
 							e.setCancelled(true);
 							return;
 						}
+						// Neutral
+
+						else if ((mplayer.hasFaction() && mplayer.getRelationTo(faction) == Rel.NEUTRAL
+								&& !StickConfig.instance.allowNeutral)) {
+
+
+							if (!faction.getName().contains("Wilderness") && !faction.getName().contains("Safezone") 
+									&& !faction.getName().contains("Warzone")) {
+
+
+								plugin.msg(p, StickConfig.instance.territoryMessage.replace("%claims%",
+										mplayer.getRelationTo(faction).getColor() + faction.getName()));
+								e.setCancelled(true);
+								return;
+							}
+						}
+
 
 						ItemStack is = p.getItemInHand();
 						ItemMeta im = is.getItemMeta();
@@ -360,8 +368,8 @@ public class PlayerListener implements Listener {
 								} else {
 									plugin.msg(p,
 											StickConfig.instance.sellMessage
-													.replace("%balance%", plugin.getEcon().format(r.balance))
-													.replace("%price%", plugin.getEcon().format(r.amount)));
+											.replace("%balance%", plugin.getEcon().format(r.balance))
+											.replace("%price%", plugin.getEcon().format(r.amount)));
 								}
 
 								System.out.println(p.getName() + " sold items via sellstick for " + r.amount
